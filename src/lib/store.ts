@@ -64,6 +64,7 @@ interface WatchlistState {
   removeFromWatchlist: (id: string) => void;
   isInWatchlist: (id: string) => boolean;
   clearWatchlist: () => void;
+  setWatchlist: (stocks: StockData[]) => void;
 }
 
 export const useWatchlistStore = create<WatchlistState>()(
@@ -71,20 +72,37 @@ export const useWatchlistStore = create<WatchlistState>()(
     (set, get) => ({
       watchlist: [],
       addToWatchlist: (stock) => {
-        if (!get().watchlist.find((s) => s.id === stock.id)) {
-          // Limit to 10 most recently viewed items for performance, newest first
-          set((state) => ({ 
-             watchlist: [stock, ...state.watchlist].slice(0, 10) 
-          }));
-        }
+        set((state) => {
+          const filtered = state.watchlist.filter((s) => s.id !== stock.id);
+          const newWatchlist = [stock, ...filtered].slice(0, 10);
+          
+          const token = useAuthStore.getState().token;
+          if (token) {
+            fetch('/api/user/watchlist', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({ stock })
+            }).catch(e => console.error('Watchlist sync failed', e));
+          }
+          
+          return { watchlist: newWatchlist };
+        });
       },
       removeFromWatchlist: (id) => {
         set((state) => ({ watchlist: state.watchlist.filter((s) => s.id !== id) }));
+        const token = useAuthStore.getState().token;
+        if (token) {
+          fetch(`/api/user/watchlist?id=${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          }).catch(e => console.error('Watchlist remove failed', e));
+        }
       },
       isInWatchlist: (id) => {
         return !!get().watchlist.find((s) => s.id === id);
       },
       clearWatchlist: () => set({ watchlist: [] }),
+      setWatchlist: (stocks) => set({ watchlist: stocks }),
     }),
     {
       name: 'stocker-ai-watchlist-history', 
@@ -131,16 +149,17 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       login: (token, user) => {
         set({ token, user });
-        // Hydrate cloud state quietly
-        fetch('/api/user/wishlist', {
+        // Hydrate all cloud state in one unified sync call
+        fetch('/api/user/sync', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         .then(res => res.json())
         .then(json => {
           if (json.data) {
-             useWishlistStore.getState().setWishlist(json.data);
+             if (json.data.wishlist) useWishlistStore.getState().setWishlist(json.data.wishlist);
+             if (json.data.watchlist) useWatchlistStore.getState().setWatchlist(json.data.watchlist);
           }
-        }).catch(e => console.error('Cloud sync fetch failed', e));
+        }).catch(e => console.error('Cloud sync hydration failed', e));
       },
       logout: () => {
         set({ token: null, user: null });

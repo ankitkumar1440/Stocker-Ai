@@ -23,6 +23,14 @@ const UserSchema = new mongoose.Schema({
     change: Number,
     isPositive: Boolean
   }],
+  watchlist: [{
+    id: String,
+    symbol: String,
+    name: String,
+    price: Number,
+    change: Number,
+    isPositive: Boolean
+  }],
   preferences: {
     theme: { type: String, default: 'dark' },
     notifications: { type: Boolean, default: true }

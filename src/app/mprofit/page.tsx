@@ -1,6 +1,6 @@
 'use client';
 import { formatCurrency } from '@/lib/utils';
-import { useWishlistStore, useAIStore, useAuthStore } from '@/lib/store';
+import { useWishlistStore, useAIStore, useAuthStore, useWatchlistStore } from '@/lib/store';
 import { useEffect, useState } from 'react';
 import StockModal from '@/components/StockModal';
 
@@ -10,6 +10,7 @@ export default function MProfitPage() {
   const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
   const wishlist = useWishlistStore((state) => state.wishlist);
   const user = useAuthStore((state) => state.user);
+  const addToWatchlist = useWatchlistStore((state) => state.addToWatchlist);
   
   const aiStore = useAIStore();
   const [mprofitStocks, setMprofitStocks] = useState<any[]>(aiStore.mprofitStocks || []);
@@ -189,7 +190,17 @@ export default function MProfitPage() {
                       </div>
                       <div className="flex items-center gap-2">
                          <button 
-                           onClick={() => setSelectedStock(stock)}
+                           onClick={() => {
+                             setSelectedStock(stock);
+                             addToWatchlist({
+                               id: stock.id,
+                               symbol: stock.symbol,
+                               name: stock.name,
+                               price: stock.currentPrice,
+                               change: parseFloat((stock.growthPrediction || "0").replace('+', '').replace('%', '')),
+                               isPositive: true
+                             });
+                           }}
                            className="text-xs px-4 py-1.5 rounded-full border border-outline-variant/30 hover:bg-surface-highest transition-colors font-medium"
                          >
                            Details

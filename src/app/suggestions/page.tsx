@@ -1,6 +1,6 @@
 'use client';
 import { formatCurrency } from '@/lib/utils';
-import { useWishlistStore, useAIStore } from '@/lib/store';
+import { useWishlistStore, useAIStore, useWatchlistStore } from '@/lib/store';
 import { useEffect, useState } from 'react';
 import StockModal from '@/components/StockModal';
 
@@ -8,6 +8,7 @@ export default function SuggestionsPage() {
   const addToWishlist = useWishlistStore((state) => state.addToWishlist);
   const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
   const wishlist = useWishlistStore((state) => state.wishlist);
+  const addToWatchlist = useWatchlistStore((state) => state.addToWatchlist);
   
   const aiStore = useAIStore();
   const [recommendations, setRecommendations] = useState<any[]>(aiStore.suggestions || []);
@@ -110,7 +111,7 @@ export default function SuggestionsPage() {
 
               <div className="mt-6 flex justify-end relative z-20 gap-3">
                  <button 
-                   onClick={() => setSelectedStock(rec)}
+                   onClick={() => { setSelectedStock(rec); addToWatchlist({ id: rec.id, symbol: rec.symbol, name: rec.name, price: rec.price, change: rec.change, isPositive: rec.change > 0 }); }}
                    className="text-sm font-bold flex items-center gap-2 transition-colors px-4 py-2 border rounded-full border-outline-variant/30 hover:bg-surface-highest"
                  >
                    Details
