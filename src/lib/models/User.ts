@@ -16,8 +16,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
   wishlist: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Stock'
+    id: String,
+    symbol: String,
+    name: String,
+    price: Number,
+    change: Number,
+    isPositive: Boolean
   }],
   preferences: {
     theme: { type: String, default: 'dark' },

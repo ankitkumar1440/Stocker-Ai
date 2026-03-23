@@ -16,6 +16,19 @@ export default function DashboardPage() {
 
   const displayStocks = mounted ? watchlistItems : [];
 
+  if (mounted && !user) {
+    return (
+      <div className="flex-1 max-w-7xl mx-auto w-full px-6 py-20 flex flex-col items-center justify-center relative z-10 text-center">
+        <h1 className="text-4xl font-display font-bold mb-6 text-error">Access Restricted</h1>
+        <p className="text-on-surface-variant max-w-lg mb-8">Personal Dashboards are exclusively generated for authenticated members. Please sign in to securely access your portfolio and recent history.</p>
+        <div className="flex gap-4">
+          <Link href="/login" className="btn-neon px-8 py-3 rounded-full font-bold">Secure Login</Link>
+          <Link href="/signup" className="px-8 py-3 rounded-full font-bold border border-outline-variant/30 hover:bg-surface-highest transition-colors">Create Account</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 max-w-7xl mx-auto w-full px-6 py-8 flex flex-col space-y-8 relative z-10">
       
