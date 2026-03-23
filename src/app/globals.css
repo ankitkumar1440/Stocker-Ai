@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-surface: #0b0e11;
+  --color-surface-container: #161a1e;
+  --color-surface-highest: #22262b;
+  --color-primary: #81ecff;
+  --color-primary-dim: #00d4ec;
+  --color-secondary: #dd8bfb;
+  --color-on-surface: #f8f9fe;
+  --color-on-surface-variant: #a9abaf;
+  --color-outline: #737679;
+  --color-outline-variant: #45484c;
+  
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Manrope", sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+    font-size: 16px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  button, a, [role="button"] {
+    cursor: pointer !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .glass-panel {
+    background-color: rgba(22, 26, 30, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(69, 72, 76, 0.15);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .btn-neon {
+    background: linear-gradient(90deg, var(--color-primary), #00e3fd);
+    color: #003840;
+    box-shadow: 0px 0px 15px rgba(0, 212, 236, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-neon:hover {
+    box-shadow: 0px 0px 25px rgba(0, 212, 236, 0.6);
+    transform: translateY(-2px);
+  }
 }
