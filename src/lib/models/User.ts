@@ -29,4 +29,6 @@ const UserSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-export default mongoose.models.User || mongoose.model('User', UserSchema);
+// Force HMR to clear cached Mongoose models to allow schema updates without restarting server
+delete mongoose.models.User;
+export default mongoose.model('User', UserSchema);
