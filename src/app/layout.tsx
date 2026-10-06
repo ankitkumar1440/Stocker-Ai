@@ -17,6 +17,10 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Stocker-Ai | High-Performance Stock Analysis",
   description: "Invest smarter with AI-powered stock tracking.",
+  other: {
+    "zap-site-verification": "zap-verify-d315e294-11e6-437e-bdbf-e1635826c73c",
+    "owner-email": "akkr1440@gmail.com",
+  },
 };
 
 export default function RootLayout({

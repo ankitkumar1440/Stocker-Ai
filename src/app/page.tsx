@@ -1,5 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import ScrollSequence from '@/components/ScrollSequence';
+
+export const metadata: Metadata = {
+  other: {
+    'zap-site-verification': 'zap-verify-d315e294-11e6-437e-bdbf-e1635826c73c',
+    'owner-email': 'akkr1440@gmail.com',
+  },
+};
 
 export default function Home() {
   return (
