@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Stocker-Ai | High-Performance Stock Analysis",
   description: "Invest smarter with AI-powered stock tracking.",
   other: {
-    "zap-site-verification": "zap-verify-d315e294-11e6-437e-bdbf-e1635826c73c",
+    "zap-site-verification": "zap-verify-4580a5ef-77c1-45d4-9fec-e4a25291da97",
     "owner-email": "akkr1440@gmail.com",
   },
 };
