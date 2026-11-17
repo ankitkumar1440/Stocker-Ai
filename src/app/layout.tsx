@@ -17,10 +17,6 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Stocker-Ai | High-Performance Stock Analysis",
   description: "Invest smarter with AI-powered stock tracking.",
-  other: {
-    "zap-site-verification": "zap-verify-81612d3a-a65a-4070-a524-16133b61706d",
-    "owner-email": "akkr1440@gmail.com",
-  },
 };
 
 export default function RootLayout({
@@ -30,6 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="zap-site-verification" content="zap-verify-81612d3a-a65a-4070-a524-16133b61706d" />
+        <meta name="owner-email" content="akkr1440@gmail.com" />
+      </head>
       <body className={`${spaceGrotesk.variable} ${manrope.variable} antialiased min-h-screen flex flex-col`}>
         <Navbar />
         {children}
