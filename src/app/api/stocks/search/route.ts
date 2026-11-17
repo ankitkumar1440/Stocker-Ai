@@ -2,13 +2,22 @@ import { NextResponse } from 'next/server';
 import YahooFinance from 'yahoo-finance2';
 const yahooFinance = new YahooFinance();
 
+// Allow only alphanumeric, spaces, dots, hyphens — block script injection
+const SAFE_QUERY_RE = /^[a-zA-Z0-9 .\-&]+$/;
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q');
+    const rawQuery = searchParams.get('q');
     
-    if (!query) {
+    if (!rawQuery || rawQuery.trim().length === 0) {
       return NextResponse.json({ error: 'Missing search query parameter' }, { status: 400 });
+    }
+
+    // Sanitize: strip to safe characters, max length 100
+    const query = rawQuery.trim().slice(0, 100);
+    if (!SAFE_QUERY_RE.test(query)) {
+      return NextResponse.json({ error: 'Invalid search query' }, { status: 400 });
     }
 
     // Step 1: Perform Global Search via Yahoo Finance
